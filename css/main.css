@@ -11,16 +11,15 @@ body, h1, h2, h3, p, ul, li {
     padding: 20px;
 }
 
-/* Header styles */
-header {
-    text-align: center;
-    margin-bottom: 20px;
+/* Game board styles */
+.game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Category styles */
 .categories {
     display: flex;
-    justify-content: space-between;
     margin-bottom: 20px;
 }
 
@@ -34,23 +33,71 @@ header {
     text-align: center;
 }
 
-/* Question board styles */
-.question-board {
+.question-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
 }
 
-.question-tile {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
+/* Flip card styles */
+.flip-card {
+    width: 100%;
+    height: 100%;
+    perspective: 1000px;
 }
 
-/* Add hover effect to question tiles */
-.question-tile:hover {
+.flip-card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.flip-card-front {
+    /* Front card styles */
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flip-card-back {
+    /* Back card styles */
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(180deg);
+}
+
+/* Question card styles */
+.question-card {
+    position: relative;
+}
+
+.question {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.question-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Add hover effect for question cards */
+.question-card:hover .flip-card-front {
     background-color: #e0e0e0;
 }
