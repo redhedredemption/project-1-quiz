@@ -1,5 +1,38 @@
 /*----- constants -----*/
-
+const questions = {
+    Alpha: [
+        {
+            question: "Question 1 for Category Alpha",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1"
+        },
+        {
+            question: "Question 2 for Category Alpha",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        // Add more questions for Category Alpha
+    ],
+    Beta: [
+        {
+            question: "Question 1 for Category Beta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 3"
+        },
+        {
+            question: "Question 2 for Category Beta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 4"
+        },
+        // Add more questions for Category Beta
+    ],
+    Gamma: [
+        // Add questions for Category Gamma
+    ],
+    Delta: [
+        // Add questions for Category Delta
+    ]
+};
 
 /*----- state variables -----*/
 // Declare application-wide state variables
@@ -8,7 +41,9 @@ let currentPlayer; // Variable to track current player
 let currentQuestion; // Variable to track current question
 
 /*----- cached elements  -----*/
-
+const container = document.querySelector('.container');
+const categoryElements = document.querySelectorAll('.category');
+const questionTiles = document.querySelectorAll('.question-tile');
 
 /*----- event listeners -----*/
 // Register event listeners
