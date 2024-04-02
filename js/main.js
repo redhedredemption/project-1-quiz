@@ -59,7 +59,7 @@ function registerEventListeners() {
 // Initialize function to set up the game
 function init() {
     gameData = {
-        categories: [], // Array to store categories
+        categories: Object.keys(questions), // Array to store category names
         players: [],    // Array to store player information
         // Other game state variables...
     };
