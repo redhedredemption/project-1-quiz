@@ -4,33 +4,89 @@ const questions = {
         {
             question: "Question 1 for Category Alpha",
             options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1"
+            correctAnswer: "Option 2"
         },
         {
             question: "Question 2 for Category Alpha",
             options: ["Option 1", "Option 2", "Option 3", "Option 4"],
             correctAnswer: "Option 2"
         },
-        // Add more questions for Category Alpha
+        {
+            question: "Question 3 for Category Alpha",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 4 for Category Alpha",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
     ],
     Beta: [
         {
             question: "Question 1 for Category Beta",
             options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 3"
+            correctAnswer: "Option 2"
         },
         {
             question: "Question 2 for Category Beta",
             options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 4"
+            correctAnswer: "Option 2"
         },
-        // Add more questions for Category Beta
+        {
+            question: "Question 3 for Category Beta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 4 for Category Beta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
     ],
     Gamma: [
-        // Add questions for Category Gamma
+        {
+            question: "Question 1 for Category Gamma",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 2 for Category Gamma",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 3 for Category Gamma",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 4 for Category Gamma",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
     ],
     Delta: [
-        // Add questions for Category Delta
+        {
+            question: "Question 1 for Category Delta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 2 for Category Delta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 3 for Category Delta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
+        {
+            question: "Question 4 for Category Delta",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 2"
+        },
     ]
 };
 
