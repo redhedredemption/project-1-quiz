@@ -1,133 +1,177 @@
-/*----- constants -----*/
-const QUESTIONS_TEMPLATE = {
-    'cat 0': [
-      {
-        text: 'Question cat0-0?',
-        options: ['Answer 0-0a', 'Answer 0-0b'],
-        correctIdx: 0,
-        playerAnswer: null
-      },
-      {
-        text: 'Question cat0-1?',
-        options: ['Answer 0-1a', 'Answer 0-1b'],
-        correctIdx: 1,
-        playerAnswer: null
-      }
-    ],
-    'cat 1': [
-      {
-        text: 'Question cat1-0?',
-        options: ['Answer 1-0a', 'Answer 1-0b'],
-        correctIdx: 0,
-        playerAnswer: null
-      },
-      {
-        text: 'Question cat1-1?',
-        options: ['Answer 1-1a', 'Answer 1-1b'],
-        correctIdx: 1,
-        playerAnswer: null
-      }
-    ],
-  };
-  
-  /*----- app's state (variables) -----*/
-  let category;
-  let results;
-  let score;  
-  
-  /*----- cached element references -----*/
-  const categoriesEl = document.getElementById('categories');
-  const questionsEl = document.getElementById('questions');
-  const msgEl = document.getElementById('message');
-  const scoreBtn = document.getElementById('score-btn');
-  
-  /*----- event listeners -----*/
-  categoriesEl.addEventListener('click', handleCategoryChoice);
-  questionsEl.addEventListener('click', handleAnswer);
-  scoreBtn.addEventListener('click', handleScore);
-  
-  /*----- functions -----*/
-  init();
-  
-  function init() {
-    category = 'cat 0';
-    results = JSON.parse(JSON.stringify(QUESTIONS_TEMPLATE));
-    score = null;
-    render();
-  }
-  
-  function render() {
-    renderCategories();
-    renderQuestions();
-    renderScore();
-    renderControls();
-  }
-  
-  function renderScore() {
-    if (score) {
-      msgEl.innerHTML = `<span>${score.correct}</span> Out Of <span>${score.total}</span> Correct`;
+/* Constants */
+const NEXT_CATEGORIES = {
+  music: "musicians",
+  musicians: null, /* ======================= add additional categories ===============*/
+};
+
+
+// Number of questions per round
+const numQuestions = 4;
+
+const numCategories = 2;
+
+// Total Number of Questions
+const totalQuestions = numQuestions * numCategories;
+
+// Select elements from the DOM
+const startButton = document.getElementById("start-button");
+const nextButton = document.getElementById("next-button");
+const categoryButtons = document.querySelectorAll(".category-button");
+const questionContainerElement = document.getElementById("question-container");
+const questionElement = document.getElementById("question");
+const answerButtonsElement = document.getElementById("answer-buttons");
+
+// Initialize variables for tracking game state
+let shuffledQuestions, currentQuestionIndex, correctAnswersCount, selectedCategory;
+
+// Set first category
+
+startGame ();
+
+// Add event listeners to start and next buttons
+startButton.addEventListener("click", startGame);
+nextButton.addEventListener("click", handleNext);
+
+
+function handleNext() {
+  // if (nextButton.innerText !== "Next") {
+    
+  // }
+  if (currentQuestionIndex === shuffledQuestions.length - 1) { //Checking for last question within a category
+    selectedCategory = NEXT_CATEGORIES[selectedCategory]; // Returns the value of the next category
+    // Check if there is no next category:
+    if (selectedCategory === null) {
+      currentQuestionIndex++; // Move to the next question
+      showResult();
     } else {
-      msgEl.innerText = 'Good Luck!';
+      setQuestions();
     }
-  }
+    setNextQuestion(); // Set up the next question
+  } else {
+    currentQuestionIndex++; // Move to the next question
+    setNextQuestion();
+  } 
+  styleCategoryBtns();
+}
+
+function styleCategoryBtns() {
+  categoryButtons.forEach(function(btn) {
+    const btnText = btn.innerText.toLowerCase();
+    if (btnText === selectedCategory) {
+      btn.classList.add("active-category");
+    } else {
+      btn.classList.remove("active-category");
+    }
+  });
   
-  function renderQuestions() {
-    let html = '';
-    results[category].forEach((question, qIdx) => {
-      let answersHTML = question.options.map((option, oIdx) => `
-        <div id="q${qIdx}o${oIdx}" ${oIdx === question.playerAnswer ? 'class="player-answer"' : ''}>${option}</div>
-      `).join('');
-      html += `
-        <article>
-          <h3>${question.text}</h3>
-          <div class="answers">${answersHTML}</div>
-        </article>
-      `;
-    });
-    questionsEl.innerHTML = html;
+}
+
+function setQuestions() {
+  shuffledQuestions = shuffle(allQuestions.filter(question => question.category === selectedCategory)); // Shuffle questions of the selected category
+  shuffledQuestions = selectQuestionsSubset(shuffledQuestions, numQuestions); // Select a subset of questions for the round
+  currentQuestionIndex = 0; // Initialize current question index
+}
+
+// Function to start the game
+function startGame() {
+  selectedCategory = "music";
+  startButton.classList.add("hide"); // Hide the start button
+  questionContainerElement.classList.remove("hide"); // Show the question container
+  setQuestions();
+  setNextQuestion(); // Set up the first question
+  styleCategoryBtns();
+  correctAnswersCount = 0; // Initialize correct answers count
+}
+
+// Function to shuffle an array
+function shuffle(array) {
+  let currentIndex = array.length, temporaryValue, randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex); // Generate a random index
+    currentIndex -= 1; // Decrement index
+    temporaryValue = array[currentIndex]; // Swap elements
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
   }
-  
-  function renderControls() {
-    scoreBtn.disabled = !!getNumUnanswered();  
+  return array; // Return the shuffled array
+}
+
+// Function to select a subset of questions
+function selectQuestionsSubset(array, num) {
+  return array.slice(0, num); // Return a subset of the array
+}
+
+// Function to set up the next question
+function setNextQuestion() {
+  resetState(); // Reset the state for the next question
+  if (currentQuestionIndex < shuffledQuestions.length) { // Check if there are more questions
+    showQuestion(shuffledQuestions[currentQuestionIndex]); // Show the next question
+  } else {
+    showResult(); // Show the result if all questions have been answered
   }
-  
-  function renderCategories() {
-    let html = '';
-    Object.keys(results).forEach((cat) => {
-      html += `<button ${cat === category ? 'class="active-cat"' : ''}>${cat}</button>`;
-    });
-    categoriesEl.innerHTML = html;
+}
+
+// Function to display a question
+function showQuestion(question) {
+  questionElement.innerText = question.question; // Display the question text
+  question.answers.forEach(answer => { // Iterate through answers
+    const button = document.createElement("button"); // Create button element
+    button.innerText = answer.text; // Set button text to answer text
+    button.classList.add("button"); // Add button class
+    if (answer.correct) { // Check if the answer is correct
+      button.dataset.correct = answer.correct; // Set data attribute for correct answer
+    }
+    button.addEventListener("click", selectAnswer); // Add event listener to button
+    answerButtonsElement.appendChild(button); // Append button to answer buttons container
+  });
+}
+
+// Function to reset the game state
+function resetState() {
+  nextButton.classList.add("hide"); // Hide the next button
+  while (answerButtonsElement.firstChild) {
+    answerButtonsElement.removeChild(answerButtonsElement.firstChild); // Remove all child nodes from answer buttons container
   }
-  
-  function handleCategoryChoice(evt) {
-    if (evt.target.tagName === 'BUTTON') category = evt.target.innerText;
-    render();
+  clearStatusClass(document.body); // Clear status classes from the body
+}
+
+// Function to handle answer selection
+function selectAnswer(e) {
+  const selectedButton = e.target; // Get the selected button
+  const correct = selectedButton.dataset.correct === "true"; // Check if the selected answer is correct
+  setStatusClass(selectedButton, correct); // Set status class for the selected answer
+  if (correct) {
+    correctAnswersCount++; // Increment correct answers count
   }
-  
-  function handleAnswer(evt) {
-    const questionIdx = parseInt(evt.target.id.charAt(1));
-    const optionIdx = parseInt(evt.target.id.charAt(3));
-    if (isNaN(questionIdx) || isNaN(optionIdx) ) return;
-    results[category][questionIdx].playerAnswer = optionIdx;
-    render();
+  Array.from(answerButtonsElement.children).forEach(button => {
+    setStatusClass(button, button.dataset.correct === "true"); // Set status classes for all answer buttons
+  });
+  nextButton.classList.remove("hide");
+}
+
+// Function to display the result
+function showResult() {
+  startButton.classList.remove("hide"); // Show the start button
+  const resultMessage = `You answered ${correctAnswersCount} out of ${totalQuestions} questions correctly.`; // Generate result message
+  if (correctAnswersCount / totalQuestions >= 0.6) { // Check if the player wins
+    startButton.innerText = `You win! ${resultMessage} Restart`; // Display win message
+  } else {
+    startButton.innerText = `You lose! ${resultMessage} Restart`; // Display lose message
   }
-  
-  function handleScore(evt) {
-    let total = 0;
-    let correct = 0;
-    Object.keys(results).forEach((cat) => {
-      total += results[cat].length;
-      correct += results[cat].reduce((total, quest) => quest.playerAnswer === quest.correctIdx ? total + 1 : total, 0);
-    });
-    score = {total, correct};
-    render();
+}
+
+// Function to set status class for an element
+function setStatusClass(element, correct) {
+  clearStatusClass(element); // Clear existing status classes
+  if (correct) {
+    element.classList.add("correct"); // Add correct class if the answer is correct
+  } else {
+    element.classList.add("wrong"); // Add wrong class if the answer is wrong
   }
-  
-  function getNumUnanswered() {
-    let count = 0;
-    Object.keys(results).forEach((cat) => {
-      count += results[cat].reduce((total, quest) => quest.playerAnswer === null ? total + 1 : total, 0);
-    });
-    return count;
-  }
-  
+}
+
+// Function to clear status classes from an element
+function clearStatusClass(element) {
+  element.classList.remove("correct"); // Remove correct class
+  element.classList.remove("wrong"); // Remove wrong class
+}
