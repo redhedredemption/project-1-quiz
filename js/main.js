@@ -1,150 +1,133 @@
 /*----- constants -----*/
-const questions = {
-    Alpha: [
-        {
-            question: "Question 1 for Category Alpha",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 2 for Category Alpha",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 3 for Category Alpha",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 4 for Category Alpha",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
+const QUESTIONS_TEMPLATE = {
+    'cat 0': [
+      {
+        text: 'Question cat0-0?',
+        options: ['Answer 0-0a', 'Answer 0-0b'],
+        correctIdx: 0,
+        playerAnswer: null
+      },
+      {
+        text: 'Question cat0-1?',
+        options: ['Answer 0-1a', 'Answer 0-1b'],
+        correctIdx: 1,
+        playerAnswer: null
+      }
     ],
-    Beta: [
-        {
-            question: "Question 1 for Category Beta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 2 for Category Beta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 3 for Category Beta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 4 for Category Beta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
+    'cat 1': [
+      {
+        text: 'Question cat1-0?',
+        options: ['Answer 1-0a', 'Answer 1-0b'],
+        correctIdx: 0,
+        playerAnswer: null
+      },
+      {
+        text: 'Question cat1-1?',
+        options: ['Answer 1-1a', 'Answer 1-1b'],
+        correctIdx: 1,
+        playerAnswer: null
+      }
     ],
-    Gamma: [
-        {
-            question: "Question 1 for Category Gamma",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 2 for Category Gamma",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 3 for Category Gamma",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 4 for Category Gamma",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-    ],
-    Delta: [
-        {
-            question: "Question 1 for Category Delta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 2 for Category Delta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 3 for Category Delta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-        {
-            question: "Question 4 for Category Delta",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 2"
-        },
-    ]
-};
-
-/*----- state variables -----*/
-// Declare application-wide state variables
-let gameData; // Object containing game state
-let currentPlayer; // Variable to track current player
-let currentQuestion; // Variable to track current question
-
-/*----- cached elements  -----*/
-const container = document.querySelector('.container');
-const categoryElements = document.querySelectorAll('.category');
-const questionTiles = document.querySelectorAll('.question-tile');
-
-/*----- event listeners -----*/
-// Register event listeners
-function registerEventListeners() {
-    // Event delegation for question selection
-    document.querySelector('.categories').addEventListener('click', handleQuestionSelection);
-
-    // Event delegation for answer submission
-    document.querySelector('.question').addEventListener('submit', handleAnswerSubmission);
-}
-
-/*----- functions -----*/
-// Initialize function to set up the game
-function init() {
-    gameData = {
-        categories: Object.keys(questions), // Array to store category names
-        players: [],    // Array to store player information
-        // Other game state variables...
-    };
-
-    // Load categories and questions
-    loadCategoriesAndQuestions();
-
-    // Initialize other state variables...
-}
-// Function to render the game board with categories and question tiles
-function render() {
-    // Code to render the game board...
-}
-
-// Function to handle selecting a question
-function handleQuestionSelection(event) {
-    // Code to handle selecting a question...
-}
-
-// Function to handle submitting an answer
-function handleAnswerSubmission(event) {
-    // Code to handle submitting an answer...
-}
-
-// Initialize the game
-init();
-
-// Render the initial state to the DOM
-render();
-
-// Register event listeners
-registerEventListeners();
+  };
+  
+  /*----- app's state (variables) -----*/
+  let category;
+  let results;
+  let score;  
+  
+  /*----- cached element references -----*/
+  const categoriesEl = document.getElementById('categories');
+  const questionsEl = document.getElementById('questions');
+  const msgEl = document.getElementById('message');
+  const scoreBtn = document.getElementById('score-btn');
+  
+  /*----- event listeners -----*/
+  categoriesEl.addEventListener('click', handleCategoryChoice);
+  questionsEl.addEventListener('click', handleAnswer);
+  scoreBtn.addEventListener('click', handleScore);
+  
+  /*----- functions -----*/
+  init();
+  
+  function init() {
+    category = 'cat 0';
+    results = JSON.parse(JSON.stringify(QUESTIONS_TEMPLATE));
+    score = null;
+    render();
+  }
+  
+  function render() {
+    renderCategories();
+    renderQuestions();
+    renderScore();
+    renderControls();
+  }
+  
+  function renderScore() {
+    if (score) {
+      msgEl.innerHTML = `<span>${score.correct}</span> Out Of <span>${score.total}</span> Correct`;
+    } else {
+      msgEl.innerText = 'Good Luck!';
+    }
+  }
+  
+  function renderQuestions() {
+    let html = '';
+    results[category].forEach((question, qIdx) => {
+      let answersHTML = question.options.map((option, oIdx) => `
+        <div id="q${qIdx}o${oIdx}" ${oIdx === question.playerAnswer ? 'class="player-answer"' : ''}>${option}</div>
+      `).join('');
+      html += `
+        <article>
+          <h3>${question.text}</h3>
+          <div class="answers">${answersHTML}</div>
+        </article>
+      `;
+    });
+    questionsEl.innerHTML = html;
+  }
+  
+  function renderControls() {
+    scoreBtn.disabled = !!getNumUnanswered();  
+  }
+  
+  function renderCategories() {
+    let html = '';
+    Object.keys(results).forEach((cat) => {
+      html += `<button ${cat === category ? 'class="active-cat"' : ''}>${cat}</button>`;
+    });
+    categoriesEl.innerHTML = html;
+  }
+  
+  function handleCategoryChoice(evt) {
+    if (evt.target.tagName === 'BUTTON') category = evt.target.innerText;
+    render();
+  }
+  
+  function handleAnswer(evt) {
+    const questionIdx = parseInt(evt.target.id.charAt(1));
+    const optionIdx = parseInt(evt.target.id.charAt(3));
+    if (isNaN(questionIdx) || isNaN(optionIdx) ) return;
+    results[category][questionIdx].playerAnswer = optionIdx;
+    render();
+  }
+  
+  function handleScore(evt) {
+    let total = 0;
+    let correct = 0;
+    Object.keys(results).forEach((cat) => {
+      total += results[cat].length;
+      correct += results[cat].reduce((total, quest) => quest.playerAnswer === quest.correctIdx ? total + 1 : total, 0);
+    });
+    score = {total, correct};
+    render();
+  }
+  
+  function getNumUnanswered() {
+    let count = 0;
+    Object.keys(results).forEach((cat) => {
+      count += results[cat].reduce((total, quest) => quest.playerAnswer === null ? total + 1 : total, 0);
+    });
+    return count;
+  }
+  
