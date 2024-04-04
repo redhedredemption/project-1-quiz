@@ -1,28 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBpardy!</title>
-    <link rel="stylesheet" href="css/main.css">
-    <script defer src="js/main.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="css/main.css" rel="stylesheet" type="text/css" />
+  <script src="js/questions.js"></script>
+  <script defer src="js/main.js"></script>
 </head>
 
 <body>
+  <div class="layout">
+    <h1>SEBpardy!</h1>
+
     <div class="container">
-        <header>
-            <h1>Jeopardy</h1>
-        </header>
-        <div class="game-board">
-            <div class="categories">
-                <!-- Categories will be dynamically generated here -->
-            </div>
-            <div class="question-cards">
-                <!-- Question cards will be dynamically generated here -->
-            </div>
+      <div id="category-selection" class="button-grid">
+        <button class="category-button" data-category="music">Music</button>
+        <button class="category-button" data-category="musicians">Musicians</button>
+        <!-- ======More category buttons to be added ====== -->
+      </div>
+
+      <div id="question-container" class="hide">
+        <div id="question">Question</div>
+        <div id="answer-buttons" class="button-grid">
+          <!-- Answers dynamically loaded here -->
         </div>
+      </div>
+
+      <div class="controls">
+        <button id="start-button" class="start-button button hide">Start</button>
+        <button id="next-button" class="next-button button hide">Next</button>
+      </div>
     </div>
+  </div>
 </body>
+
 
 </html>
