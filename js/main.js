@@ -4,7 +4,6 @@ const NEXT_CATEGORIES = {
   musicians: null, /* ======================= add additional categories ===============*/
 };
 
-
 // Number of questions per round
 const numQuestions = 4;
 
@@ -31,7 +30,6 @@ startGame ();
 // Add event listeners to start and next buttons
 startButton.addEventListener("click", startGame);
 nextButton.addEventListener("click", handleNext);
-
 
 function handleNext() {
   // if (nextButton.innerText !== "Next") {
