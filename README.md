@@ -26,3 +26,8 @@ SEBpardy! is a browser-based trivia game that challenges players' knowledge of m
 To play SEBpardy!, simply follow [this link](https://redhedredemption.github.io/project-1-quiz/) to the deployed game. Once the game loads, click on a category button to select a category, then hit the "Start" button to begin. Answer the questions by selecting the correct option, and see how many you can answer correctly!
 
 If you answer 60% or more questions correctly, you win!
+
+## Next Steps
+- **Migrate to SEB content:** This game was originally intended to be a study guide for the Software Engineering Bootcamp, and music trivia was intended as a placeholder for testing purposes. Future iterations will have quiz questions on Software Engineering topics.
+
+- **Add Categories:** In future iterations, the game will have four categories instead of the current two.
